@@ -553,6 +553,13 @@ El símbol pipa `|` (pipe) envia la sortida d'un programa (`grep '>' sequences.f
 ```sh
  $ grep '>' sequences.fasta | wc -l
   3
+````
+
+Si volem calcular quants parells de base té cada seqüència:
+
+```bash
+dax@dax-lubuntu:~/biobash1/microarray$ grep -v '>' sarscov2.fasta | wc 
+    427     426   30330
 ```
 
 #### Guardar resultats en nous fitxers
@@ -623,6 +630,18 @@ Per visualitzar el contingut dels fitxers, podem utilitzar `cat`:
 
 ```bash
 ~$ cat pacientes.txt genotipado.txt
+```
+
+**Observació:**
+La majoria dels organismes eucariotes tenen `genomes diploides`, cosa que significa que tenen dues còpies de cada cromosoma (un heretat de cada progenitor). Això implica que en qualsevol posició genòmica, un individu pot tenir:
+- Una sola variant (homozigot): per exemple, A/A.
+- Dues variants diferents (heterozigot): per exemple, A/G.
+
+Aquesta doble representació permet descriure el genotip complet en aquella posició; i per això el camp SNP_a i SNP_b contenen 2 bases; per exemple:
+
+```sh
+head genotipado.txt
+1,190,1,AA,CC
 ```
 
 ---
@@ -731,7 +750,6 @@ Editors moderns reconeixen aquests formats i mostren el text correctament, però
 
 ## Exercicis.
 
-```markdown
 ### Anàlisi i Gestió de Fitxers de Dades Biomèdiques
 
 S'ha realitzat un estudi d'un nou tractament per a un **limfoma**, i s'han proporcionat dos fitxers:
@@ -748,12 +766,17 @@ $ grep -v nombre cancer_progresion.txt | wc -l
 $ grep -v id cancer_ciego.txt | wc -l
 ```
 
+En ambdós casos, la resposta és 11.
+
 
 #### 2. De quants pacients no tenim dades de progressió?
 
 ```bash
 $ grep desconocido cancer_progresion.txt | wc -l
 ```
+
+Resposta:
+1
 
 
 #### 3. Convertir la separació per comes a tabuladors en “cancer_ciego.txt” i redirigir la sortida a “cancer_ciego_tab.txt”
@@ -773,6 +796,7 @@ $ join -t $'\t' cancer_progresion.txt cancer_ciego_tab.txt > cancer.txt
 ```
 
 
+
 #### 5. Transformar els espais del fitxer “cancer.txt” per tabuladors
 
 ```bash
@@ -786,6 +810,16 @@ $ sed -e 's/ /\t/g' cancer.txt
 $ grep -i placebo cancer.txt
 ```
 
+Resultats:
+
+```sh
+1 Pepe Granada buena placebo
+4 Mónica Madrid mala placebo
+7 Óscar Barcelona mala Placebo
+10 Jordi Barcelona mala Placebo
+```
+
+
 ```bash
 $ grep -i 1mg cancer.txt
 ```
@@ -793,6 +827,8 @@ $ grep -i 1mg cancer.txt
 ```bash
 $ grep -i 2mg cancer.txt
 ```
+
+
 
 ---
 
