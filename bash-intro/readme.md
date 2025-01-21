@@ -7,7 +7,7 @@ Activitat per realitzar tractament de fitxers genòmics amb `bash`, el terminal 
 El primer que farem és baixar i descomprimir uns fitxers que ens serviran per treballar els diferents exemples:
 
 ```sh
-curl https://github.com/miquelamorosaldev/bio-bash/blob/a81a9fb9d5bb874cb8a2a573e651f4332506644a/bio-bash-1.zip | tar -xz
+curl https://github.com/miquelamorosaldev/bio-bash/bash-intro/bio-bash-1.zip | tar -xz
 ```
 
 Si no et funciona la comanda, el pots baixar i descomprimir manualment des de la URL:
@@ -69,6 +69,7 @@ En el fitxer `microarray_adenoma_hk69.csv` estan emmagatzemats els resultats d�
 Aquest és un fitxer tabular on la informació es representa dividint els camps mitjançant comes o tabuladors.  
 
 ### Què és l’adenoma i per què ens interessa aquest microarray?  
+
 - **Adenoma:**  
   Tumor que no és cancerós. Comença en cèl·lules que semblen glàndules dins del teixit epitelial (capa fina de teixit que cobreix òrgans, glàndules i altres estructures del cos).  
   Tot i que són benignes, poden derivar en càncer si no són tractats.  
@@ -81,7 +82,7 @@ Aquest és un fitxer tabular on la informació es representa dividint els camps 
 
 ---
 
-### Mostrant contingut dels fitxers: `wc`, `cat`, `head` i `tail`
+## Mostrant contingut dels fitxers: `wc`, `cat`, `head` i `tail`
 
 Aquest fitxer conté els resultats d’un experiment d’expressió diferencial en què s’han analitzat diversos adenomes.  
 És un fitxer tabular en què la informació es representa separant els camps amb **comes** o **tabuladors**.  
@@ -91,11 +92,64 @@ Aquest fitxer conté els resultats d’un experiment d’expressió diferencial 
   - Cada fila del fitxer correspon a una **sonda del microarray**.  
   - Cada columna indica una **propietat sobre la sonda** o un **resultat de la hibridació**.  
 
-**Quant ocupa aquest fitxer i quantes línies conté?**
+El primer que podem fer amb un fitxer de text és obrir-lo per veure'n els continguts. 
 
-Per saber el nombre de línies, podem utilitzar el següent comandament:  
+Hi ha editors de text que funcionen en finestres, com el gedit, i editors que funcionen a la terminal, com el nano. 
+
+Però de vegades els fitxers amb què volem treballar són tan grans que fins i tot els bons editors de text poden tenir problemes de rendiment per obrir-los.
+
+És per això que usarem comandes per visualitzar el seu contingut.
+
+### Comptar linies del fitxer: `wc` (word count)
+
+Per saber el nombre de línies, paraules i caràcters abans d'obrir el fitxer usarem la comanda `wc`:  
 
 ```bash
 wc microarray_adenoma_hk69.csv
 ```
+
+### Accés al contingut del fitxer: `cat`
+
+Podem utilitzar el següent comandament per accedir al contingut complet del fitxer:  
+```bash
+~$ cat microarray_adenoma_hk69.csv
+```
+
+⚠️ Si el fitxer és molt gran, la terminal podria **quedar bloquejada** durant un temps depenent de la memòria disponible al sistema. ⚠️
+
+- Per **finalitzar o "matar"** el programa que està executant-se (en aquest cas, el `cat`), podem utilitzar la següent combinació de tecles:  
+```text
+Control + C
+```
+
+---
+
+### Visualitzar només les primeres `head` i últimes línies `tail`.
+
+Per obtenir una idea del contingut d’un fitxer molt gran sense bloquejar la terminal, podem imprimir només les primeres o darreres línies.
+
+Per imprimir les primeres línies del fitxer usem `head`:  
+
+- Les primeres **10 línies**:  
+  ```bash
+  ~$ head microarray_adenoma_hk69.csv
+  ```
+- Les primeres **20 línies**:  
+  ```bash
+  ~$ head -n 20 microarray_adenoma_hk69.csv
+  ```
+
+En canvi, usem el comandament `tail` per veure les darreres línies
+
+```bash
+~$ tail microarray_adenoma_hk69.csv
+```
+
+--- 
+
+## TODO: 
+
+https://docs.google.com/document/d/1MFcShrG3W-5Uset3eIthnzIMG19GeeKOXj_NKKTCYjo/edit?tab=t.0
+
+https://www.marcusrb.com/unix/05-procesamiento-texto/
 
