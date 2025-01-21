@@ -9,7 +9,7 @@ Activitat per realitzar tractament de fitxers genòmics amb `bash`, el terminal 
 El primer que farem és baixar i descomprimir uns fitxers que ens serviran per treballar els diferents exemples:
 
 ```sh
-curl -L -o bio-bash-1.zip https://github.com/miquelamorosaldev/bio-bash/raw/e49cbd84e6656deb43978f94c645289dd97874d5/bash-intro/biobash1.tar.gz | tar -xz
+curl -L -o biobash1.zip https://github.com/miquelamorosaldev/bash-intro/biobash1.tar.gz | tar -xz
 ```
 
 Si no et funciona la comanda, el pots baixar i descomprimir manualment des de la URL:
