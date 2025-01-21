@@ -4,7 +4,8 @@ Activitats per realitzar tractament de fitxers d'interès per a la bioinformàti
 
 ## Índex
 
-- [Activitat 1 - Introducció al processament fitxers genòmics](bash-intro/readme.md)
+- [Introducció al shell de Linux (xtec.dev)](https://xtec.dev/linux/bash-intro/)
+- [Introducció al processament fitxers genòmics](bash-intro/readme.md)
 
 
 
