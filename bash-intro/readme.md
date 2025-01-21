@@ -2,17 +2,19 @@
 
 Activitat per realitzar tractament de fitxers genòmics amb `bash`, el terminal de comandes i scripts de `GNU/Linux`.
 
+- [Índex Activitats](../README.md)
+
 ## Primers passos.
 
 El primer que farem és baixar i descomprimir uns fitxers que ens serviran per treballar els diferents exemples:
 
 ```sh
-curl https://github.com/miquelamorosaldev/bio-bash/bash-intro/bio-bash-1.zip | tar -xz
+curl -L -o bio-bash-1.zip https://github.com/miquelamorosaldev/bio-bash/raw/e49cbd84e6656deb43978f94c645289dd97874d5/bash-intro/biobash1.tar.gz | tar -xz
 ```
 
 Si no et funciona la comanda, el pots baixar i descomprimir manualment des de la URL:
 
-<https://github.com/miquelamorosaldev/bio-bash/blob/main/bio-bash-1.zip>
+<[https://github.com/miquelamorosaldev/bio-bash/blob/main/bio-bash-1.zip](https://github.com/miquelamorosaldev/bio-bash/blob/main/bash-intro/bio-bash-1.zip)>
 
 Aquesta fitxer comprimit està acompanyat de **9 fitxers de text**:  
 
@@ -45,7 +47,12 @@ Abans de “parsejar” un fitxer, hem de saber què és i què no és un fitxer
 
 Un fitxer de text és un fitxer dividit en línies i el contingut del qual és text. Malgrat el que pugui semblar a priori, un document de **Microsoft Office** o de **LibreOffice** **no** és un fitxer de text.  
 
-Un dels punts fonamentals de la filosofia Unix, és la utilització de fitxers de text. Mentre altres sistemes operatius afavoreixen la utilització de fitxers binaris, que han de ser acompanyats d'eines especials per poder manipular-los, a Unix es va optar per crear un conjunt d'eines per a manipulació de fitxers de text (`vi`, `nano`, `gedit`) i per utilitzar per als fitxers del sistema només fitxers de text sempre que això fos possible.
+Un dels punts fonamentals de la filosofia Unix, és la utilització de fitxers de text. 
+
+Mentre altres sistemes operatius afavoreixen la utilització de fitxers binaris, que han de ser acompanyats d'eines especials per poder manipular-los, a Unix es va optar per crear un conjunt d'eines per a manipulació de fitxers de text (`vi`, `nano`, `gedit`) i per utilitzar per als fitxers del sistema només fitxers de text sempre que això fos possible.
+
+Una altra punt d'aquesta filosfia Unix ("fes una cosa i fes-la bé") s'aplica amb la preferència de comprimir fitxers amb el format `.tar.gz` en comptes del `zip`. 
+`tar` és una eina nativa als sistemes Unix des dels anys 70, pensada per empaquetar múltiples fitxers en un sol arxiu. Això el feia molt útil per transferir dades o fer còpies de seguretat. Posteriorment s'afegeix `gzip` per a la compressió. El resultat és el format combinat .tar.gz.
 
 Els nous editors de text i de codi com `notepad++` o `VSCode` també segueixen aquesta filosofia i ens serviran.
 
