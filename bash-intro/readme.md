@@ -119,7 +119,7 @@ wc microarray_adenoma_hk69.csv
 
 Podem utilitzar el següent comandament per accedir al contingut complet del fitxer:  
 ```bash
-~$ cat microarray_adenoma_hk69.csv
+~cat microarray_adenoma_hk69.csv
 ```
 
 ⚠️ Si el fitxer és molt gran, la terminal podria **quedar bloquejada** durant un temps depenent de la memòria disponible al sistema. ⚠️
@@ -139,17 +139,17 @@ Per imprimir les primeres línies del fitxer usem `head`:
 
 - Les primeres **10 línies**:  
   ```bash
-  ~$ head microarray_adenoma_hk69.csv
+  head microarray_adenoma_hk69.csv
   ```
 - Les primeres **20 línies**:  
   ```bash
-  ~$ head -n 20 microarray_adenoma_hk69.csv
+  head -n 20 microarray_adenoma_hk69.csv
   ```
 
 En canvi, usem el comandament `tail` per veure les darreres línies
 
 ```bash
-~$ tail microarray_adenoma_hk69.csv
+tail microarray_adenoma_hk69.csv
 ```
 
 --- 
@@ -221,7 +221,7 @@ head -n 100 microarray_adenoma_hk69.csv | grep leukemia
 
 **Quants gens relacionats con la leucèmia hi ha al fitxer?**
 ```bash
-~$ grep leukemia microarray_adenoma_hk69.csv | wc
+~grep leukemia microarray_adenoma_hk69.csv | wc
      89    5256   31600
 ```
 
@@ -244,15 +244,18 @@ Quan el fitxer està dividit en camps, com en el cas de la taula que estem utili
 **Visualitza el nom i la descripció del gen relacionat amb la leucèmia:**
 
 ```bash
-~$ grep leukemia microarray_adenoma_hk69.csv | cut -f 3,4
-~$ grep leukemia microarray_adenoma_hk69.csv | cut -f 3,4 | wc -l
-89
+grep leukemia microarray_adenoma_hk69.csv | cut -f 3,4
 ```
+
+```bash
+grep leukemia microarray_adenoma_hk69.csv | cut -f 3,4 | wc -l
+```
+89
 
 Amb el paràmetre `-f` indiquem la llista de camps (fields) que volem seleccionar. `cut` assumeix que els camps en el fitxer estan separats per tabuladors. Però també podem especificar que els camps estan separats per un altre caràcter, com per exemple per comes:
 
 ```bash
-~$ grep leukemia microarray_adenoma_hk69.csv | cut -f 3,4 -d ','
+grep leukemia microarray_adenoma_hk69.csv | cut -f 3,4 -d ','
 ```
 
 Un altre exemple seria:
@@ -551,16 +554,17 @@ El símbol pipa `|` (pipe) envia la sortida d'un programa (`grep '>' sequences.f
 **Important!**  Aneu amb compte per assegurar-vos que el símbol `>` estigui inclòs entre cometes en aquesta ordre. Si no s'inclouen les cometes, es sobreescriurà el fitxer! 
 
 ```sh
- $ grep '>' sequences.fasta | wc -l
+ grep '>' sequences.fasta | wc -l
   3
 ````
 
 Si volem calcular quants parells de base té cada seqüència:
 
 ```bash
-dax@dax-lubuntu:~/biobash1/microarray$ grep -v '>' sarscov2.fasta | wc 
-    427     426   30330
+grep -v '>' sarscov2.fasta | wc 
 ```
+    427     426   30330
+
 
 #### Guardar resultats en nous fitxers
 
@@ -569,7 +573,7 @@ A més a més; un símbol `>` a la línia d'ordres redirigeix ​​la sortida d
 Per exemple, podem redirigir la sortida de l'exemple anterior així:
 
 ```sh
- $ grep ">" sequences.fasta -l | wc > numSequences.txt
+grep ">" sequences.fasta -l | wc > numSequences.txt
 ```
 
 D'aquesta manera no imprimeix res a la pantalla, sinó emmagatzema la informació en un fitxer. 
@@ -617,7 +621,12 @@ id_paciente,SNP_a,SNP_b
 Per fusionar aquests dos fitxers per columnes i per files, utilitzem el comandament `paste`:
 
 ```bash
-~$ paste -d',' pacientes.txt genotipado.txt
+paste -d ',' pacients.txt genotipat.txt
+```
+
+Resultat
+
+```bash
 id_paciente,nivel_colesterol,id_paciente,SNP_a,SNP_b
 1,190,1,AA,CC
 2,250,2,AC,GG
@@ -629,7 +638,7 @@ id_paciente,nivel_colesterol,id_paciente,SNP_a,SNP_b
 Per visualitzar el contingut dels fitxers, podem utilitzar `cat`:
 
 ```bash
-~$ cat pacientes.txt genotipado.txt
+cat pacients.txt genotipat.txt
 ```
 
 **Observació:**
@@ -675,7 +684,10 @@ invernadero rojo     ovalado          normal
 El comandament `join` ens permet unir aquestes dues taules en una sola utilitzant el nom de la varietat de tomàquet com a clau comuna:
 
 ```bash
-$ join pasaporte.txt caracterizacion.txt
+join pasaporte.txt caracterizacion.txt
+```
+
+```bash
 nombre origen color forma duración
 valenciano Valencia rojo apuntado corta
 penjar Barcelona rojo ovalado larga
@@ -686,7 +698,10 @@ invernadero Murcia rojo ovalado normal
 Si utilitzem `paste`, les taules es fusionaran sense tenir en compte la clau comuna, i es duplicaran les columnes amb el mateix nom:
 
 ```bash
-$ paste pasaporte.txt caracterizacion.txt
+paste pasaporte.txt caracterizacion.txt
+```
+
+```bash
 nombre        origen  nombre        color    forma            duración
 valenciano    Valencia    valenciano  rojo     apuntado         corta
 penjar        Barcelona    penjar      rojo     ovalado          larga
@@ -709,7 +724,7 @@ A la pràctica, per obrir un fitxer correctament, cal saber en quina taula de ca
 El comandament `file` permet identificar la codificació dels fitxers. Exemple:
 
 ```bash
-$ file *
+file *
 caracterizacion.txt:         ASCII text
 genotipado:                  ASCII text
 microarray_adenoma_hk69.csv: ASCII text, with very long lines
@@ -724,16 +739,16 @@ Amb el programa **iconv**, podem convertir fitxers d'una codificació a una altr
 
 ```bash
 # De UTF-8 a ISO-8859-1
-$ iconv -t ISO-8859-1 -f UTF-8 caracterizacion.txt > caracterizacion.txt.utf-8_mod.txt
+iconv -t ISO-8859-1 -f UTF-8 caracterizacion.txt > caracterizacion.txt.utf-8_mod.txt
 
 # De ISO-8859-1 a UTF-8
-$ iconv -f ISO-8859-1 -t UTF-8 caracterizacion.txt > caracterizacion.txt.iso-8859-1_mod.txt
+iconv -f ISO-8859-1 -t UTF-8 caracterizacion.txt > caracterizacion.txt.iso-8859-1_mod.txt
 ```
 
 Després de la conversió, podem verificar la codificació amb `file`:
 
 ```bash
-$ file caracterizacion.txt.iso-8859-1_mod.txt 
+file caracterizacion.txt.iso-8859-1_mod.txt 
 caracterizacion.txt.iso-8859-1_mod.txt: UTF-8 Unicode text
 ```
 
@@ -756,14 +771,22 @@ S'ha realitzat un estudi d'un nou tractament per a un **limfoma**, i s'han propo
 - **“cancer_progresion.txt”**: conté dades dels pacients i els resultats del tractament.
 - **“cancer_ciego.txt”**: inclou la informació per desxifrar l'assaig a doble cec, amb identificadors dels pacients i la dosi administrada.
 
+
+**Referències:**
+
+Introducción al diseño de experimentos | Khan Academy en Español:
+
+<https://www.youtube.com/watch?v=T3ZrPkN-Tek>
+
+
 #### 1. Quants pacients hi havia a l'estudi?
 
 ```bash
-$ grep -v nombre cancer_progresion.txt | wc -l
+grep -v nombre cancer_progresion.txt | wc -l
 ```
 
 ```bash
-$ grep -v id cancer_ciego.txt | wc -l
+grep -v id cancer_ciego.txt | wc -l
 ```
 
 En ambdós casos, la resposta és 11.
@@ -772,7 +795,7 @@ En ambdós casos, la resposta és 11.
 #### 2. De quants pacients no tenim dades de progressió?
 
 ```bash
-$ grep desconocido cancer_progresion.txt | wc -l
+grep desconocido cancer_progresion.txt | wc -l
 ```
 
 Resposta:
@@ -782,32 +805,33 @@ Resposta:
 #### 3. Convertir la separació per comes a tabuladors en “cancer_ciego.txt” i redirigir la sortida a “cancer_ciego_tab.txt”
 
 ```bash
-$ sed -e 's/,/\t/' cancer_ciego.txt > cancer_ciego_tab.txt
+sed -e 's/,/\t/' cancer_ciego.txt > cancer_ciego_tab.txt
 ```
 
 #### 4. Unir “cancer_progresion.txt” i “cancer_ciego_tab.txt” en el fitxer “cancer.txt”
 
 ```bash
-$ join cancer_progresion.txt cancer_ciego_tab.txt > cancer.txt
+join cancer_progresion.txt cancer_ciego_tab.txt > cancer.txt
 ```
 
 ```bash
-$ join -t $'\t' cancer_progresion.txt cancer_ciego_tab.txt > cancer.txt
+join -t $'\t' cancer_progresion.txt cancer_ciego_tab.txt > cancer.txt
 ```
-
 
 
 #### 5. Transformar els espais del fitxer “cancer.txt” per tabuladors
 
 ```bash
-$ sed -e 's/ /\t/g' cancer.txt
+sed -e 's/ /\t/g' cancer.txt
 ```
+
+Observació! No acaba de funcionar.
 
 
 #### 6. Com ha anat el tractament segons la dosi?
 
 ```bash
-$ grep -i placebo cancer.txt
+grep -i placebo cancer.txt
 ```
 
 Resultats:
@@ -819,58 +843,70 @@ Resultats:
 10 Jordi Barcelona mala Placebo
 ```
 
-
 ```bash
-$ grep -i 1mg cancer.txt
+grep -i 1mg cancer.txt
+```
+
+```sh
+2 Juan Lugo muy buena 1mg
+3 Alicia Valencia muy buena 1mg
+8 Trini Valencia muy buena 1mg
 ```
 
 ```bash
-$ grep -i 2mg cancer.txt
+grep -i 2mg cancer.txt
 ```
 
+```sh
+5 Alberto Madrid regular 2mg
+6 Toni Toledo mala 2mg
+9 Pepe Valencia buena 2mg
+11 Manolo Sevilla desconocido 2mg
+```
 
+Podem concloure que els que s'han pres 1mg són els que li ha anat millor.
 
 ---
 
 #### 7. Crear un fitxer amb els primers 100 resultats del microarray i només 10 columnes (“micro.txt”)
 
 ```bash
-$ grep -v '^"' microarray_adenoma_hk69.csv | head -n 100 | cut -f 1-10 > micro.txt
+grep -v '^"' microarray_adenoma_hk69.csv | head -n 100 | cut -f 1-10 > micro.txt
 ```
 
 #### 8. Ordenar el fitxer “micro.txt” pel nom del gen (camp 3) i per l’ID en ordre numèric invers
 
 ```bash
-$ sort -k 3 micro.txt
+sort -k 3 micro.txt
 ```
 
 ```bash
-$ sort -nr micro.txt
+sort -nr micro.txt
 ```
 
 ---
 
 
-```markdown
 ### 9. Disposem de dos fitxers amb seqüències d’ADN (**seqs_1.fasta** i **seqs_2.fasta**).  
 
 #### a. Quantes seqüències hi ha en cada fitxer?  
 
 ```bash
-$ cat seqs_1.fasta | grep '>' | wc -l
-11
+cat seqs_1.fasta | grep '>' | wc -l
 ```
+11
+
 
 ```bash
-$ cat seqs_2.fasta | grep '>' | wc -l
-11
+cat seqs_2.fasta | grep '>' | wc -l
 ```
+11
 
 #### b. Hi ha alguna seqüència present en tots dos fitxers?  
 Comprovem primer el total de seqüències no repetides sumant les dues llistes.  
 
 ```bash
-$ cat seqs_1.fasta seqs_2.fasta | grep '>' | sort | uniq | wc -l
+cat seqs_1.fasta seqs_2.fasta | grep '>' | sort | uniq | wc -l
 20
 ```
 
@@ -879,7 +915,7 @@ $ cat seqs_1.fasta seqs_2.fasta | grep '>' | sort | uniq | wc -l
 #### c. Identifiquem quines seqüències es repeteixen:  
 
 ```bash
-$ cat seqs_1.fasta seqs_2.fasta | grep '>' | sort | uniq -d
+cat seqs_1.fasta seqs_2.fasta | grep '>' | sort | uniq -d
 >gi|311207420|gb|GT728904.1|GT728904
 >gi|311210057|gb|GT715712.1|GT715712
 ```
@@ -887,47 +923,40 @@ $ cat seqs_1.fasta seqs_2.fasta | grep '>' | sort | uniq -d
 **Confirmació:** Verifiquem que aquestes seqüències apareixen en ambdós fitxers:  
 
 ```bash
-$ grep '>gi|311207420|gb|GT728904.1|GT728904' seqs_1.fasta
+grep '>gi|311207420|gb|GT728904.1|GT728904' seqs_1.fasta
 >gi|311207420|gb|GT728904.1|GT728904
 ```
 
 ```bash
-$ grep '>gi|311207420|gb|GT728904.1|GT728904' seqs_2.fasta
+grep '>gi|311207420|gb|GT728904.1|GT728904' seqs_2.fasta
 >gi|311207420|gb|GT728904.1|GT728904
 ```
 
----
-
-### 10. Disposem d’un fitxer amb seqüències d’ADN (**seqs_3.fasta**).  
-#### a. Extraiem els noms de les seqüències:  
+#### 10. Disposem d’un fitxer amb seqüències d’ADN (**seqs_3.fasta**)
 
 Primer, inspeccionem el fitxer:  
 
 ```bash
-$ head seqs_3.fasta
+head seqs_3.fasta
 ```
 
 Després, extreiem els noms de les seqüències:  
 
 ```bash
-$ grep ">" seqs_3.fasta | cut -c 2- | cut -f 1 -d " "
+grep ">" seqs_3.fasta | cut -c 2- | cut -f 1 -d " "
 ```
-
----
 
 #### 11. Transcrivim l’ADN a ARN substituint totes les **T** per **U**:  
 
 
 ```bash
-$ cat seqs_3.fasta | sed 's/T/U/g'
+cat seqs_3.fasta | sed 's/T/U/g'
 ```
-
----
 
 ### 12. Reemplaçar **ATG** per **GAT** en el fitxer **seqs_3.fasta**  
 
 ```bash
-$ cat seqs_3.fasta | sed 's/ATG/GAT/g'
+cat seqs_3.fasta | sed 's/ATG/GAT/g'
 ```
 
 ---
@@ -936,24 +965,26 @@ $ cat seqs_3.fasta | sed 's/ATG/GAT/g'
 #### a. Quantes seqüències s’han mapejat?  
 
 ```bash
-$ grep -v "^@" tomate.sam | wc -l
+grep -v "^@" tomate.sam | wc -l
 ```
 
 #### b. Quantes s’han mapejat en direcció reversa?  
 (Camp 2 amb valor 16):  
 
 ```bash
-$ grep -v "^@" tomate.sam | cut -f 2 | grep 16 | wc -l
+grep -v "^@" tomate.sam | cut -f 2 | grep 16 | wc -l
 ```
 
 #### c. Quins són els **unigenes** als quals s’ha pogut mapar alguna seqüència?  
 
 ```bash
-$ grep -v "^@" tomate.sam | cut -f 3 | sort -u
+grep -v "^@" tomate.sam | cut -f 3 | sort -u
 ```
 
 #### d. Ordenar les seqüències mapejades segons el nom del **unigene** i la posició:  
 
 ```bash
-$ grep -v "^@" tomate.sam | sort -k 3,4 | cut -f 1
+grep -v "^@" tomate.sam | sort -k 3,4 | cut -f 1
 ```
+
+
