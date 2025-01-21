@@ -9,12 +9,13 @@ Activitat per realitzar tractament de fitxers genòmics amb `bash`, el terminal 
 El primer que farem és baixar i descomprimir uns fitxers que ens serviran per treballar els diferents exemples:
 
 ```sh
-curl -L -o biobash1.zip https://github.com/miquelamorosaldev/bash-intro/biobash1.tar.gz | tar -xz
+curl -L https://raw.githu
+busercontent.com/miquelamorosaldev/bio-bash/main/bash-intro/biobash1.tar.gz | tar -xz
 ```
 
 Si no et funciona la comanda, el pots baixar i descomprimir manualment des de la URL:
 
-<[https://github.com/miquelamorosaldev/bio-bash/blob/main/bio-bash-1.zip](https://github.com/miquelamorosaldev/bio-bash/blob/main/bash-intro/bio-bash-1.zip)>
+[URL Fitxer biobash1.tar.gz](https://raw.githubusercontent.com/miquelamorosaldev/bio-bash/main/bash-intro/biobash1.tar.gz)
 
 Aquesta fitxer comprimit està acompanyat de **9 fitxers de text**:  
 
@@ -153,6 +154,81 @@ En canvi, usem el comandament `tail` per veure les darreres línies
 ```
 
 --- 
+
+## grep: Buscar patrons en fitxers de text
+
+La comanda **grep** (*Generalized Regular Expression Parser*) pren un fitxer d'entrada (o l'entrada estàndard) i filtra les línies que contenen el patró de cerca que li hem indicat. 
+
+És útil per filtrar el contingut d'un fitxer segons un terme o patró específic.
+
+---
+
+### Exemple d'ús bàsic del grep
+
+**Quina és l'expressió dels gens relacionats amb la leucèmia en el fitxer del microarray?**  
+Això, que en altres sistemes operatius podria ser complex, a Unix és senzill:
+
+```bash
+grep leukemia microarray_adenoma_hk69.csv
+```
+
+Per defecte, **grep** retorna les línies que contenen el patró especificat. Si volem obtenir les línies que **no contenen** el patró, podem utilitzar l'opció `-v` (**inVert**).  
+La comanda **grep** distingeix entre majúscules i minúscules, però podem desactivar aquest comportament amb l'opció `-i` (**ignore case**):
+
+```bash
+grep -i leukemia microarray_adenoma_hk69.csv
+```
+
+---
+
+### Trobar la línia i comptar coincidències
+
+**En quines posicions del fitxer es troben les línies que contenen la paraula *leukemia*?**  
+**Quantes línies hi ha amb aquest patró?**
+
+1. Llistar les línies amb el número de línia:
+   ```bash
+   grep -n leukemia microarray_adenoma_hk69.csv
+   ```
+2. Comptar el nombre total de línies:
+   ```bash
+   grep -n leukemia microarray_adenoma_hk69.csv | wc -l
+   ```
+   **Sortida:**  
+   ```
+   89
+   ```
+
+### Altres usos avançats del grep
+
+**Manual i opcions avançades**
+**grep** suporta expressions regulars, fet que el fa extremadament potent. Pots consultar totes les opcions disponibles al manual:  
+```bash
+man grep
+```
+
+---
+
+### Combinació amb pipes (`|`)
+
+Una de les grans avantatges de **grep** és la seva capacitat per combinar-se amb altres programes mitjançant pipes (`|`).
+
+**Exemple:** Busca el terme *leukemia* només en les primeres 100 línies del fitxer:
+```bash
+head -n 100 microarray_adenoma_hk69.csv | grep leukemia
+```
+
+### Redirecció del resultat amb (`>`)
+
+Redirigeix el resultat de la cerca a un fitxer anomenat *busqueda_leukemia_100.txt* per guardar-lo:
+
+```bash
+head -n 100 microarray_adenoma_hk69.csv | grep leukemia > busqueda_leukemia_100.txt
+```
+
+Amb **grep**, pots gestionar grans volums de dades de manera eficient i personalitzar les cerques segons les teves necessitats! 🚀
+
+---
 
 ## TODO: 
 
