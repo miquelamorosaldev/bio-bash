@@ -313,7 +313,11 @@ El comandament `sed` processa les línies una a una, aplica la transformació qu
 Per eliminar les cometes dels camps del fitxer obtingut en la pregunta anterior, utilitzem:
 
 ```bash
-~$ grep leukemia microarray_adenoma_hk69.csv | cut -f 3,4 | sed "s/\"//g"
+grep leukemia microarray_adenoma_hk69.csv | cut -f 3,4 | sed "s/\"//g"
+```
+
+Resultat:
+```
 BAALC   Brain and acute leukemia, cytoplasmic
 DEK     DEK oncogene (DNA binding)
 ```
@@ -346,12 +350,12 @@ Si desitgem ordenar alfabèticament un fitxer de text, només hem d'utilitzar el
 **Ordena alfabèticament els gens relacionats amb la leucèmia:**
 
 ```bash
-~$ grep leukemia microarray_adenoma_hk69.csv | cut -f 3,4 | sort
+grep leukemia microarray_adenoma_hk69.csv | cut -f 3,4 | sort
 ```
 
 El comandament `sort` també pot fer ordenacions numèriques i pot ordenar per qualsevol dels camps presents en el fitxer (consulta el manual per a més informació).
 
-### Comandament `uniq`
+### Eliminar duplicats amb `uniq`
 
 En l'exemple anterior, al ordenar amb `sort`, hem vist que en la llista obtinguda hi ha gens repetits. Amb el comandament `uniq` podem eliminar les línies duplicades consecutives. 
 
@@ -360,46 +364,28 @@ Per a una eliminació completa, cal recordar ordenar amb `sort` abans d'utilitza
 **Visualitza el nom i la descripció del gen relacionat amb la leucèmia, però sense que apareguin repeticions de gens:**
 
 ```bash
-~$ grep leukemia microarray_adenoma_hk69.csv | cut -f 3,4 | sort | uniq
+grep leukemia microarray_adenoma_hk69.csv | cut -f 3,4 | sort | uniq
 ```
 
 **Comprovació del nombre de línies abans i després d'eliminar les repeticions:**
 
 ```bash
-~$ grep leukemia microarray_adenoma_hk69.csv | cut -f 3,4 | sort | wc -l
-89
-~$ grep leukemia microarray_adenoma_hk69.csv | cut -f 3,4 | sort | uniq | wc -l
-55
+grep leukemia microarray_adenoma_hk69.csv | cut -f 3,4 | sort | wc -l
 ```
+89
+
+```bash
+grep leukemia microarray_adenoma_hk69.csv | cut -f 3,4 | sort | uniq | wc -l
+```
+55
 
 **Ordena alfabèticament els gens relacionats amb la leucèmia:**
 
 ```bash
-~$ grep leukemia microarray_adenoma_hk69.csv | cut -f 3,4 | sort
+grep leukemia microarray_adenoma_hk69.csv | cut -f 3,4 | sort
 ```
 
 El comandament `sort` també pot fer ordenacions numèriques i pot ordenar per qualsevol dels camps presents en el fitxer (consulta el manual per a més informació).
-
-### Comandament `uniq`
-
-En l'exemple anterior, al ordenar amb `sort`, hem vist que en la llista obtinguda hi ha gens repetits. Amb el comandament `uniq` podem eliminar les línies duplicades consecutives. 
-
-Per a una eliminació completa, cal recordar ordenar amb `sort` abans d'utilitzar `uniq`.
-
-**Visualitza el nom i la descripció del gen relacionat amb la leucèmia, però sense que apareguin repeticions de gens:**
-
-```bash
-~$ grep leukemia microarray_adenoma_hk69.csv | cut -f 3,4 | sort | uniq
-```
-
-**Comprovació del nombre de línies abans i després d'eliminar les repeticions:**
-
-```bash
-~$ grep leukemia microarray_adenoma_hk69.csv | cut -f 3,4 | sort | wc -l
-89
-~$ grep leukemia microarray_adenoma_hk69.csv | cut -f 3,4 | sort | uniq | wc -l
-55
-```
 
 --- 
 
@@ -554,7 +540,7 @@ done
 Recorda com executar-lo:
 
 ```sh
-chmod u+x
+chmod u+x readfasta.sh
 ./readfasta.sh 
 ```
 
