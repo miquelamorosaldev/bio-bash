@@ -401,9 +401,197 @@ Per a una eliminació completa, cal recordar ordenar amb `sort` abans d'utilitza
 55
 ```
 
+--- 
+
+## Tractament fitxers `.fasta`
+
+Probablement és el format de fitxer més utilitzat per a seqüències i un dels tipus de formats de fitxer més comuns en bioinformàtica. 
+
+El format de fitxer `FASTA` té els seus orígens en el programa FAST, utilitzat per a l'alineació de seqüències. 
+
+El format de fitxer es defineix simplement com un fitxer de text pla amb una o més entrades que consisteixen en una línia amb un símbol `>` seguit d'una línia de definició identificativa única, o `defline`, i una o més `línies de dades de seqüència`. 
+
+**Crear un fitxer de text fasta** és molt fàcil, tant en un editor de text pla com `notepad` o `VSCode`.
+
+Podem crear un **fitxer unifasta (una sola seqüencia)** que es digui `uniseq.fasta` amb l'editor VSCode, simplement copia el text i guarda'l.
+
+```txt
+>Seqüència aminoàcids de prova
+MTHCP*MTI*
+```
+
+O bé crear un **fitxer multifasta** (més d'una seqüència) anomenat `sequences.fa` des del terminal Linux:
+
+```sh
+echo ">a
+ACGCGTACGTGACGACGATCG
+>b
+ATTTCGCGACTCTGCCTACGCTAC
+>c
+GGGAAACCTTTTTTT" > sequences.fa
+```
+
+Bingo! Ja tenim un fitxer multifasta :) amb les seqüències a, b i c.
+
+El requisit fonamental és que el fitxer sigui `plain text` per tal que es pugui tractar amb qualsevol aplicació de processament de textos o llenguatge de programació.
+
+Per tant, aquests fitxers es tracten millor en editors de text com `nano`, `sublime` o `VSCode`. 
+
+Per veure un fitxer `FASTA` des de la línia d'ordres sense editar-lo, pots fer servir la aplicació `cat`.
+
+```sh
+cat uniseq.fasta
+>Seqüència aminoàcids de prova
+MTHCP*MTI*
+```
+
+També pots llegir-les linia a linia amb `more` i `less`; que això és ideal per a fitxers grans:
+
+```py
+less sequences.fa
+```
+
+Per sortir de less només has d’apretar la tecla `q` (“quit”).
+
+També pots filtrar les primeres i últimes files amb les comandes: `head` i `tail`. 
+
 ---
 
-# Tutorial: Comandaments `paste` i `join`
+### Característiques. 
+
+Realment no hi ha cap restricció sobre la seqüència de la definició en el format estàndard, excepte que la definició ha de seguir immediatament el `>` sense cap espai intermedi. 
+
+Per tant, dins de d’seqüència, hi ha dos coses:
+
+* Un `comentari/descripció` que comença per `>` i es `una sola linea`
+* La `seqüència de bases` dividides per línies de ...[70] caràcters, pot variar.
+
+Si es un fitxer MULTI-FASTA (més d'una línia), és separen les seqüències amb una linea de capçalera ( `>` ).
+
+Qualsevol tipus de seqüència o conjunt de seqüències es pot posar en un fitxer FASTA: els 3.000 milions de parells de bases del genoma humà complet, la seqüència d'ARN completa d'un virus o la seqüència d'ADN del promotor del gen del teu ratolí favorit són exemples vàlids.
+
+### On trobar fitxers FASTA.
+
+Ja sabeu que un dels millors llocs on aconseguir fitxers `.fasta` d’organismes reals de forma legal és el repositori públic de l’`NCBI`, que ens facilita un cercador molt complet. 
+
+Exposem algusns enllaços directes com a exemples.
+
+Gènoma complet del SarsCov2:
+- <https://www.ncbi.nlm.nih.gov/nuccore/NC_045512.2?report=fasta>
+
+Gen de la orquídea:
+- <https://github.com/biopython/biopython/blob/master/Doc/examples/ls_orchid.fasta>
+
+Gen insulina a l’ésser humà.
+- <https://www.ncbi.nlm.nih.gov/nuccore/L15440.1?report=fasta>
+
+Gen de l'insulina al gos:
+- <https://www.ncbi.nlm.nih.gov/nuccore/AF013216.1?report=fasta>
+
+### Com descarregar-los ? 
+
+Per automatitzar el nostre programari, pots descarregar-te fitxers fasta com qualsevol fitxer.
+
+Des del terminal (`bash`):
+
+```sh
+wget -O ls_orchid.fasta https://raw.githubusercontent.com/biopython/biopython/refs/heads/master/Doc/examples/ls_orchid.fasta
+```
+
+També pots veure com fer-ho amb `Python` i la llibreria `urllib3`; per tal de descarregar-lo únicament si no hi és.
+
+<https://xtec.dev/python/http/#cache>
+
+⚠️ Però compte! Hi ha restriccions si els volem baixar d'NCBI. ⚠️
+
+NCBI té obert un repositori `FTP` amb fitxers de les seves bases de dades (com els articles PMC o PUBMED) que es troba a:
+- <https://ftp.ncbi.nlm.nih.gov/>
+
+Però ni des d'aquest repositori ni des de programari fet amb Python o bash se'ns permet baixar directament qualsevol fitxer fasta.
+
+Més endavant veurem com fer-ho amb un programari específic que distribueix NCBI/Entrez:
+- https://xtec.dev/bio/entrez/>
+
+---
+
+### Lectura i tractament de fitxers fasta amb GNU/Linux (Bash).
+
+#### Mostrar contingut fitxers
+
+Obre un terminal en Linux (la icona és una finestra negra) o bé prem la drecera Ctrl + Alt + T, que funciona en distribucions basades en Debian (Ubuntu, Mint, PopOS …)
+
+Introdueix aquesta comanda, que ens permet veure la capçalera i el contingut de les seqüències del fitxer sequences.fa (que hem creat abans):
+
+```sh
+grep -E '^\S+$' sequences.fa | awk '{printf "%s ", $0; getline; print $0}'
+```
+
+Resultat:
+```sh
+>a ACGCGTACGTGACGACGATCG
+>b ATTTCGCGACTCTGCCTACGCTAC
+>c GGGAAACCTTTTTTT
+```
+
+Gràcies al llenguatge del shell `awk` podem aconseguir-ho.
+
+Una altra manera és usar un script de `bash`; que anomenarem `readfasta.sh`:
+
+```sh
+#!/bin/bash
+echo 'Llegim tots els fitxers fasta de la carpeta actual.'
+for i in *.fasta; do
+    echo "Núm Seqüències"
+    grep -c "^>" $i
+    echo "Info Seqüències"
+    # Capçalera seqüència.
+    grep "^>" $i
+    # Contingut seqüència:
+    grep -v "^>" $i
+done
+```
+
+Recorda com executar-lo:
+
+```sh
+chmod u+x
+./readfasta.sh 
+```
+
+#### Recompte dades de seqüències
+
+El símbol pipa `|` (pipe) envia la sortida d'un programa (`grep '>' sequences.fasta`) a l'entrada d'un altre programa (`wc`), ja que amb aquest exemple estem enviant la sortida de grep al `wc` per comptar. 
+
+**Important!**  Aneu amb compte per assegurar-vos que el símbol `>` estigui inclòs entre cometes en aquesta ordre. Si no s'inclouen les cometes, es sobreescriurà el fitxer! 
+
+```sh
+ $ grep '>' sequences.fasta | wc -l
+  3
+```
+
+#### Guardar resultats en nous fitxers
+
+A més a més; un símbol `>` a la línia d'ordres redirigeix ​​la sortida d'un programa a un fitxer i sobreescriu el fitxer. 
+
+Per exemple, podem redirigir la sortida de l'exemple anterior així:
+
+```sh
+ $ grep ">" sequences.fasta -l | wc > numSequences.txt
+```
+
+D'aquesta manera no imprimeix res a la pantalla, sinó emmagatzema la informació en un fitxer. 
+
+#### Transcripció i edició de seqüències
+
+També podem realitzar algunes operacions, com la transcripció; amb la comanda `sed` (stream editor).
+
+```sh
+ cat seq_3.fasta | sed ‘s/T/U/g’
+```
+
+---
+
+## Concatenació de files de fitxers: `paste` i `join`
 
 ### Comandament `paste`
 
@@ -503,9 +691,247 @@ invernadero   Murcia      invernadero   rojo     ovalado          normal
 
 ---
 
-## TODO: 
+### Reptes codificació fitxers.
 
-https://docs.google.com/document/d/1MFcShrG3W-5Uset3eIthnzIMG19GeeKOXj_NKKTCYjo/edit?tab=t.0
+Els ordinadors codifiquen els caràcters del llenguatge natural mitjançant **codi binari**, que es transforma en caràcters utilitzant una **taula de codificació**. La taula **ASCII**, una de les més populars, inclou només caràcters de la llengua anglesa i no permet accents ni caràcters d'altres alfabets.
 
-https://www.marcusrb.com/unix/05-procesamiento-texto/
+Per solucionar aquesta limitació, es van crear variants de l'ASCII per a cada llengua. Això, però, va generar el problema de la **incompatibilitat entre taules**, ja que usar una taula incorrecta produïa caràcters estranys. La norma **Unicode** va ser desenvolupada com una solució global, oferint més de 100.000 símbols que inclouen gairebé tots els alfabets humans. 
 
+A la pràctica, per obrir un fitxer correctament, cal saber en quina taula de caràcters ha estat codificat. A **Linux**, s'usa el format **UTF-8**, un estàndard Unicode, mentre que **Windows** utilitza sovint **Windows-1252** (Latin1). Els editors de text permeten seleccionar la codificació correcta per evitar errors de visualització.
+
+### Ús del Comandament `file`
+
+El comandament `file` permet identificar la codificació dels fitxers. Exemple:
+
+```bash
+$ file *
+caracterizacion.txt:         ASCII text
+genotipado:                  ASCII text
+microarray_adenoma_hk69.csv: ASCII text, with very long lines
+pacientes:                   ASCII text
+pasaporte.txt:               ASCII text
+sagan.utf-8_mod.txt:         ASCII text
+```
+
+### Conversió de Codificacions amb `iconv`
+
+Amb el programa **iconv**, podem convertir fitxers d'una codificació a una altra. Exemple:
+
+```bash
+# De UTF-8 a ISO-8859-1
+$ iconv -t ISO-8859-1 -f UTF-8 caracterizacion.txt > caracterizacion.txt.utf-8_mod.txt
+
+# De ISO-8859-1 a UTF-8
+$ iconv -f ISO-8859-1 -t UTF-8 caracterizacion.txt > caracterizacion.txt.iso-8859-1_mod.txt
+```
+
+Després de la conversió, podem verificar la codificació amb `file`:
+
+```bash
+$ file caracterizacion.txt.iso-8859-1_mod.txt 
+caracterizacion.txt.iso-8859-1_mod.txt: UTF-8 Unicode text
+```
+
+### Final de Línia
+
+Els fitxers de text utilitzen diferents caràcters per marcar el final de línia segons el sistema operatiu:
+- **Unix/Linux**: `\n`
+- **Windows**: `\r\n`
+- **MacOS clàssic**: `\r`
+
+Editors moderns reconeixen aquests formats i mostren el text correctament, però eines com el **Notepad** de Windows poden tenir problemes amb fitxers creats en Linux, mostrant tot el text en una sola línia amb símbols estranys.
+
+---
+
+## Exercicis.
+
+```markdown
+### Anàlisi i Gestió de Fitxers de Dades Biomèdiques
+
+S'ha realitzat un estudi d'un nou tractament per a un **limfoma**, i s'han proporcionat dos fitxers:
+- **“cancer_progresion.txt”**: conté dades dels pacients i els resultats del tractament.
+- **“cancer_ciego.txt”**: inclou la informació per desxifrar l'assaig a doble cec, amb identificadors dels pacients i la dosi administrada.
+
+#### 1. Quants pacients hi havia a l'estudi?
+
+```bash
+$ grep -v nombre cancer_progresion.txt | wc -l
+```
+
+```bash
+$ grep -v id cancer_ciego.txt | wc -l
+```
+
+
+#### 2. De quants pacients no tenim dades de progressió?
+
+```bash
+$ grep desconocido cancer_progresion.txt | wc -l
+```
+
+
+#### 3. Convertir la separació per comes a tabuladors en “cancer_ciego.txt” i redirigir la sortida a “cancer_ciego_tab.txt”
+
+```bash
+$ sed -e 's/,/\t/' cancer_ciego.txt > cancer_ciego_tab.txt
+```
+
+#### 4. Unir “cancer_progresion.txt” i “cancer_ciego_tab.txt” en el fitxer “cancer.txt”
+
+```bash
+$ join cancer_progresion.txt cancer_ciego_tab.txt > cancer.txt
+```
+
+```bash
+$ join -t $'\t' cancer_progresion.txt cancer_ciego_tab.txt > cancer.txt
+```
+
+
+#### 5. Transformar els espais del fitxer “cancer.txt” per tabuladors
+
+```bash
+$ sed -e 's/ /\t/g' cancer.txt
+```
+
+
+#### 6. Com ha anat el tractament segons la dosi?
+
+```bash
+$ grep -i placebo cancer.txt
+```
+
+```bash
+$ grep -i 1mg cancer.txt
+```
+
+```bash
+$ grep -i 2mg cancer.txt
+```
+
+---
+
+#### 7. Crear un fitxer amb els primers 100 resultats del microarray i només 10 columnes (“micro.txt”)
+
+```bash
+$ grep -v '^"' microarray_adenoma_hk69.csv | head -n 100 | cut -f 1-10 > micro.txt
+```
+
+#### 8. Ordenar el fitxer “micro.txt” pel nom del gen (camp 3) i per l’ID en ordre numèric invers
+
+```bash
+$ sort -k 3 micro.txt
+```
+
+```bash
+$ sort -nr micro.txt
+```
+
+---
+
+
+```markdown
+### 9. Disposem de dos fitxers amb seqüències d’ADN (**seqs_1.fasta** i **seqs_2.fasta**).  
+
+#### a. Quantes seqüències hi ha en cada fitxer?  
+
+```bash
+$ cat seqs_1.fasta | grep '>' | wc -l
+11
+```
+
+```bash
+$ cat seqs_2.fasta | grep '>' | wc -l
+11
+```
+
+#### b. Hi ha alguna seqüència present en tots dos fitxers?  
+Comprovem primer el total de seqüències no repetides sumant les dues llistes.  
+
+```bash
+$ cat seqs_1.fasta seqs_2.fasta | grep '>' | sort | uniq | wc -l
+20
+```
+
+**Resultat:** Hi ha seqüències repetides perquè el nombre total és inferior a la suma de seqüències úniques.  
+
+#### c. Identifiquem quines seqüències es repeteixen:  
+
+```bash
+$ cat seqs_1.fasta seqs_2.fasta | grep '>' | sort | uniq -d
+>gi|311207420|gb|GT728904.1|GT728904
+>gi|311210057|gb|GT715712.1|GT715712
+```
+
+**Confirmació:** Verifiquem que aquestes seqüències apareixen en ambdós fitxers:  
+
+```bash
+$ grep '>gi|311207420|gb|GT728904.1|GT728904' seqs_1.fasta
+>gi|311207420|gb|GT728904.1|GT728904
+```
+
+```bash
+$ grep '>gi|311207420|gb|GT728904.1|GT728904' seqs_2.fasta
+>gi|311207420|gb|GT728904.1|GT728904
+```
+
+---
+
+### 10. Disposem d’un fitxer amb seqüències d’ADN (**seqs_3.fasta**).  
+#### a. Extraiem els noms de les seqüències:  
+
+Primer, inspeccionem el fitxer:  
+
+```bash
+$ head seqs_3.fasta
+```
+
+Després, extreiem els noms de les seqüències:  
+
+```bash
+$ grep ">" seqs_3.fasta | cut -c 2- | cut -f 1 -d " "
+```
+
+---
+
+#### 11. Transcrivim l’ADN a ARN substituint totes les **T** per **U**:  
+
+
+```bash
+$ cat seqs_3.fasta | sed 's/T/U/g'
+```
+
+---
+
+### 12. Reemplaçar **ATG** per **GAT** en el fitxer **seqs_3.fasta**  
+
+```bash
+$ cat seqs_3.fasta | sed 's/ATG/GAT/g'
+```
+
+---
+
+### 13. Disposem d’un fitxer de mapeig en format SAM (**tomate.sam**)  
+#### a. Quantes seqüències s’han mapejat?  
+
+```bash
+$ grep -v "^@" tomate.sam | wc -l
+```
+
+#### b. Quantes s’han mapejat en direcció reversa?  
+(Camp 2 amb valor 16):  
+
+```bash
+$ grep -v "^@" tomate.sam | cut -f 2 | grep 16 | wc -l
+```
+
+#### c. Quins són els **unigenes** als quals s’ha pogut mapar alguna seqüència?  
+
+```bash
+$ grep -v "^@" tomate.sam | cut -f 3 | sort -u
+```
+
+#### d. Ordenar les seqüències mapejades segons el nom del **unigene** i la posició:  
+
+```bash
+$ grep -v "^@" tomate.sam | sort -k 3,4 | cut -f 1
+```
